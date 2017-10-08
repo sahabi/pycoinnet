@@ -3,7 +3,7 @@ import logging
 import io
 import struct
 
-from pycoin.block import Block, BlockHeader
+from pycoin.block import Block
 from pycoin.encoding import double_sha256
 from pycoin.serialize import b2h_rev, bitcoin_streamer
 from pycoin.tx.Tx import Tx
@@ -158,7 +158,7 @@ def _make_parse_from_data():
             ("v", (InvItem.parse, lambda f, inv_item: inv_item.stream(f))),
             ("T", (Tx.parse, lambda f, tx: tx.stream(f))),
             ("B", (Block.parse, lambda f, block: block.stream(f))),
-            ("z", (BlockHeader.parse, lambda f, blockheader: blockheader.stream(f))),
+            ("z", (Block.parse_as_header, lambda f, blockheader: blockheader.stream(f))),
             ("1", (lambda f: struct.unpack("B", f.read(1))[0], lambda f, b: f.write(struct.pack("B", b)))),
         ]
         bitcoin_streamer.BITCOIN_STREAMER.register_functions(more_parsing)
